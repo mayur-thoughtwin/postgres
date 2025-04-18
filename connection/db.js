@@ -7,4 +7,13 @@ const pool = new Pool({
   port: 5432,
   host: 'localhost',
 })
-module.exports = { pool };
+
+const closePool = async () => {
+  try {
+    await pool.end();
+    console.log("Pool closed successfully.");
+  } catch (error) {
+    console.error("Error while closing the pool:", error);
+  }
+};
+module.exports = { pool, closePool };

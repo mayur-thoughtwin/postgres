@@ -1,4 +1,4 @@
-const { pool } = require("../connection/db");
+const { pool, closePool } = require("../connection/db");
 
 const createOrganisation = async (req, res) => {
     const { name, description } = req.body;
@@ -28,6 +28,7 @@ const getAllOrganizations = async (req, res) => {
     try {
         const result = await pool.query("SELECT * FROM organizations ORDER BY id");
         res.status(200).json({ organizations: result.rows });
+        closePool();
     } catch (error) {
         console.error("Error fetching organizations:", error);
         res.status(500).json({ msg: "Internal server error" });
