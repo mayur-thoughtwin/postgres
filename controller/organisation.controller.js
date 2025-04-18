@@ -14,10 +14,12 @@ const createOrganisation = async (req, res) => {
         const insertQuery = `INSERT INTO organizations (name, description) VALUES ($1, $2) RETURNING *`;
         const insertResult = await pool.query(insertQuery, [name, description]);
 
-        return res.status(201).json({
+        res.status(201).json({
             msg: "Organization created successfully",
             organization: insertResult.rows[0],
         });
+       closePool();
+
     } catch (error) {
         console.error("Error in createOrganisation:", error);
         return res.status(500).json({ msg: "Internal server error" });
@@ -65,6 +67,7 @@ const updateOrganization = async (req, res) => {
             msg: "Organization updated successfully",
             organization: result.rows[0],
         });
+        closePool();
     } catch (error) {
         console.error("Error updating organization:", error);
         res.status(500).json({ msg: "Internal server error" });
@@ -90,6 +93,7 @@ const deleteOrganization = async (req, res) => {
             msg: "Organization deleted successfully",
             organization: result.rows[0],
         });
+        closePool();
     } catch (error) {
         console.error("Error deleting organization:", error);
         res.status(500).json({ msg: "Internal server error" });
